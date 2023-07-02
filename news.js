@@ -13,7 +13,7 @@ app.use('/Source', express.static(path.join(__dirname, 'Source')));
 app.use('/img', express.static(path.join(__dirname, 'img')));
 app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
 
-const api_key = 'be06e67a4e314d1d91df02bca884fb8b';
+const api_key = '1f816631501047999c8561cc58b5dae0';
 
 let articles = [];
 
@@ -24,7 +24,10 @@ app.get('/news', async (req, res) => {
     try {
       const response = await axios.get(`https://newsapi.org/v2/everything?q=${category}&apiKey=${api_key}`);
       articles = response.data.articles;
-  
+
+      //Filter only articles contain image
+      articles = articles.filter((article) => article.urlToImage);
+      
       // Sort articles based on the selected option
       if (sort === 'new') {
         articles.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)); 
@@ -53,7 +56,7 @@ app.get('/news', async (req, res) => {
       let imageSrc = ''; 
       if (urlToImage) {
         try {
-          // Fetch the image using axios
+          //Get the image using axios
           const imageResponse = await axios.get(urlToImage, { responseType: 'arraybuffer' });
           const imageData = Buffer.from(imageResponse.data, 'binary').toString('base64');
           imageSrc = `data:${imageResponse.headers['content-type']};base64,${imageData}`;
@@ -88,6 +91,10 @@ app.get('/news', async (req, res) => {
     try {
       const response = await axios.get(url);
       articles = response.data.articles;
+
+      //Filter only articles contain image
+      articles = articles.filter((article) => article.urlToImage);
+
       res.render('news', { articles, category, sort }); // Pass the articles, category, and sort
     } catch (error) {
       console.error('Error searching news:', error);
@@ -95,9 +102,17 @@ app.get('/news', async (req, res) => {
     }
   });
   
-app.get('/home', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+  app.get('/home', (req, res) => {
+    res.render('index');
+  });
+
+  app.get('/about', (req, res) => {
+    res.render('about');
+  });
+
+  app.get('/contact', (req, res) => {
+    res.render('contact');
+  });
 
 //Start server
 app.listen(3000, () => {

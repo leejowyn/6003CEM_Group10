@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Foodeiblog Template">
@@ -32,10 +31,10 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li><a href="./index.html">Home</a></li>
-                <li><a href="./news.html">News</a></li>
-                <li><a href="#">Weather</a></li>
-                <li><a href="#">Blog</a></li>
+                <li><a href="/index">Home</a></li>
+                <li><a href="/news">News</a></li>
+                <li><a href="/weather">Weather</a></li>
+                <li><a href="/blog">Blog</a></li>
                 <li class="dropdown"><a href="#">Pages</a>
                     <ul class="dropdown__menu">
                         <li><a href="./categories-grid.html">Categories Grid</a></li>
@@ -46,8 +45,8 @@
                         <li><a href="./typography.html">Typography</a></li>
                     </ul>
                 </li>
-                <li><a href="./about.html">About</a></li>
-                <li><a href="./contact.html">Contact</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
             </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -98,13 +97,13 @@
                     <div class="col-lg-8 col-md-10 order-md-2 order-3">
                         <nav class="header__menu">
                             <ul>
-                                <li><a href="./index.html">Home</a></li>
-                                <li><a href="./news.html">News</a>
+                                <li><a href="/index">Home</a></li>
+                                <li><a href="/news">News</a>
                                     <div class="header__megamenu__wrapper">
                                         <div class="header__megamenu">
                                             <div class="header__megamenu__item">
                                                 <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/megamenu/p-1.jpg">
+                                                    data-setbg="img/tech.jpg">
                                                     <div class="label">News</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
@@ -114,7 +113,7 @@
                                             </div>
                                             <div class="header__megamenu__item">
                                                 <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/megamenu/p-2.jpg">
+                                                    data-setbg="img/business.jpg">
                                                     <div class="label">News</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
@@ -124,8 +123,8 @@
                                             </div>
                                             <div class="header__megamenu__item">
                                                 <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/megamenu/p-3.jpg">
-                                                    <div class="label">News</div>
+                                                    data-setbg="img/sports.jpg">
+                                                    <div class="label">Sports</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
                                                     <h5><a href="/news?category=sports">Sports</a>
@@ -134,8 +133,8 @@
                                             </div>
                                             <div class="header__megamenu__item">
                                                 <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/megamenu/p-4.jpg">
-                                                    <div class="label">News</div>
+                                                    data-setbg="img/science.jpg">
+                                                    <div class="label">Science</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
                                                     <h5><a href="/news?category=science">Science</a>
@@ -144,7 +143,7 @@
                                             </div>
                                             <div class="header__megamenu__item">
                                                 <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/megamenu/p-5.jpg">
+                                                    data-setbg="img/tv.jpg">
                                                     <div class="label">News</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
@@ -158,8 +157,8 @@
                                 <li><a href="#">Dinner</a></li>
                                 <li><a href="#">Desserts</a></li>
                                 <li><a href="#">Vegan</a></li>
-                                <li><a href="./about.html">About</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
+                                <li><a href="/about">About</a></li>
+                                <li><a href="/contact">Contact</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -175,12 +174,12 @@
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="header__btn">
-                        <a href="./signin.html" class="primary-btn">Subscribe</a>
+                        <a href="/signin" class="primary-btn">Subscribe</a>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="header__logo">
-                        <a href="./index.html"><img src="img/logo.png" alt=""></a>
+                        <a href="/index"><img src="img/logo.png" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-md-2">
@@ -199,206 +198,76 @@
 
     <!-- Single Post Section Begin -->
     <section class="single-post spad">
-                    <div id="news-detail">
-                        <div class="single-post__hero set-bg" style="background-image: url('<%= urlToImage %>'); background-size: cover;">
-                            <div class="image-overlay"></div>
-                          </div>
-                          <div class="container">
-                            <div class="row d-flex justify-content-center">
-                              <div class="col-lg-8">
-                                <div class="single-post__title">
-                                  <div class="single-post__title__meta">
-                                    <h2><%= formattedDate %></h2>
-                                    <span><%= month %></span>
-                                  </div>
-                                  <br>
-                                  <div class="single-post__title__text">
-                                    <ul class="label">
-                                      <li><%= source.name %></li>
-                                    </ul>
-                                    <h3><%= title %></h3>
-                                  </div>
-                                  <div class="single-post__social__item">
-                                    <ul>
-                                      <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                      <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                      <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                      <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
-                                    </ul>
-                                  </div>
-                                  <div class="single-post__recipe__details">
-                                    <div class="single-post__recipe__details__option">
-                                      <ul>
-                                        <li>
-                                          <h5><i class="fa fa-user-o"></i> AUTHOR</h5>
-                                          <span><%= author %></span>
-                                        </li>
-                                        <li>
-                                          <h5><i class="fa fa-clock-o"></i> DATE</h5>
-                                          <span><%= date.toDateString() %></span>
-                                        </li>
-                                        <li>
-                                          <h5><i class="fa fa-book"></i> SOURCE</h5>
-                                          <span><%= source.name %></span>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                    <div class="single-post__recipe__details__direction">
-                                      <h5>Story:</h5>
-                                      <p><%= description %></p>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="single-post__quote">
-                                  <p><%= content %></p>
-                                  <span>FROM <b><%= source.name %></b></span>
-                                </div>
-                                <div class="single-post__next__previous">
-                                  <div class="row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                      <a href="#" class="single-post__previous">
-                                        <h6><span class="arrow_carrot-left"></span> Previous posts</h6>
-                                        <div class="single-post__previous__meta">
-                                          <h4>08</h4>
-                                          <span>Aug</span>
-                                        </div>
-                                        <div class="single-post__previous__text">
-                                          <span>Dinner</span>
-                                          <h5>The Best Weeknight Baked <br />Potatoes, 3 Creative Ways</h5>
-                                        </div>
-                                      </a>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                      <a href="#" class="single-post__next">
-                                        <h6>Next posts <span class="arrow_carrot-right"></span> </h6>
-                                        <div class="single-post__next__meta">
-                                          <h4>05</h4>
-                                          <span>Aug</span>
-                                        </div>
-                                        <div class="single-post__next__text">
-                                          <span>Smoothie</span>
-                                          <h5>The $8 French Rosé I Buy in <br />Bulk Every Summer</h5>
-                                        </div>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="single-post__author__profile">
-                                  <div class="single-post__author__profile__pic">
-                                    <img src="img/categories/single-post/author-profile.jpg" alt="">
-                                  </div>
-                                  <div class="single-post__author__profile__text">
-                                    <h4>Lena Mollein.</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                      incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                      exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                                    <div class="single-post__author__profile__social">
-                                      <a href="#"><i class="fa fa-facebook"></i></a>
-                                      <a href="#"><i class="fa fa-twitter"></i></a>
-                                      <a href="#"><i class="fa fa-google-plus"></i></a>
-                                      <a href="#"><i class="fa fa-instagram"></i></a>
-                                      <a href="#"><i class="fa fa-youtube-play"></i></a>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="single-post__comment">
-                                  <div class="widget__title">
-                                    <h4>03 Comment</h4>
-                                  </div>
-                                  <div class="single-post__comment__item">
-                                    <div class="single-post__comment__item__pic">
-                                      <img src="img/categories/single-post/comment/comment-1.jpg" alt="">
-                                    </div>
-                                    <div class="single-post__comment__item__text">
-                                      <h5>Brandon Kelley</h5>
-                                      <span>15 Aug 2017</span>
-                                      <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                        magnam.</p>
-                                      <ul>
-                                        <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  <div class="single-post__comment__item single-post__comment__item--reply">
-                                    <div class="single-post__comment__item__pic">
-                                      <img src="img/categories/single-post/comment/comment-2.jpg" alt="">
-                                    </div>
-                                    <div class="single-post__comment__item__text">
-                                      <h5>Brandon Kelley</h5>
-                                      <span>15 Aug 2017</span>
-                                      <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                        magnam.</p>
-                                      <ul>
-                                        <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  <div class="single-post__comment__item">
-                                    <div class="single-post__comment__item__pic">
-                                      <img src="img/categories/single-post/comment/comment-3.jpg" alt="">
-                                    </div>
-                                    <div class="single-post__comment__item__text">
-                                      <h5>Brandon Kelley</h5>
-                                      <span>15 Aug 2017</span>
-                                      <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                        adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                        magnam.</p>
-                                      <ul>
-                                        <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="single-post__leave__comment">
-                                  <div class="widget__title">
-                                    <h4>Leave a comment</h4>
-                                  </div>
-                                  <form action="#">
-                                    <div class="input-list">
-                                      <input type="text" placeholder="Name">
-                                      <input type="text" placeholder="Email">
-                                      <input type="text" placeholder="Website">
-                                    </div>
-                                    <textarea placeholder="Message"></textarea>
-                                    <button type="submit" class="site-btn">Submit</button>
-                                  </form>
-                                </div>
-                              </div>
+        <div class="single-post__hero set-bg" data-setbg="<%= urlToImage %>"></div>
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <div class="single-post__title">
+                        <div class="single-post__title__meta">
+                            <h2><%= formattedDate %></h2>
+                            <span><%= month %></span>
+                        </div>
+                        <div class="single-post__title__text">
+                            <ul class="label">
+                                <li><%= source.name %></li>
+                            </ul>
+                            <h3><%= title %></h3>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="single-post__social__item">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                            <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="single-post__recipe__details">
+                        <div class="single-post__recipe__details__option">
+                            <ul>
+                                <li>
+                                    <h5><i class="fa fa-user-o"></i> AUTHOR</h5>
+                                    <span><%= author %></span>
+                                </li>
+                                <li>
+                                    <h5><i class="fa fa-clock-o"></i> DATE</h5>
+                                    <span><%= date.toDateString() %></span>
+                                </li>
+                                <li>
+                                    <h5><i class="fa fa-clock-o"></i> SOURCE</h5>
+                                    <span><%= source.name %></span>
+                                </li>
+                                <li><a href="#" class="primary-btn"><i class="fa fa-print"></i> Read more</a></li>
+                            </ul>
+                        </div>
+                        <div class="single-post__recipe__details__indegradients">
+                            <h5>Story:</h5>
+                            <p><%= description %></p>
+                        </div>
+                    </div>
+                    <div class="single-post__quote">
+                        <p><%= content %></p>
+                        <span>FROM <b><%= source.name %></b></span>
+                    </div>
+                    <div class="single-post__author__profile">
+                        <div class="single-post__author__profile__pic">
+                            <img src="img/categories/single-post/author-profile.jpg" alt="">
+                        </div>
+                        <div class="single-post__author__profile__text">
+                            <h4>Teoh</h4>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                            <div class="single-post__author__profile__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                                <a href="#"><i class="fa fa-youtube-play"></i></a>
                             </div>
-                          </body>
-                          </html>  
-                      </div>
-                                          <!--  -->
-                      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-                      <script>
-                        // Get the query parameters from the URL
-                        const queryParams = new URLSearchParams(window.location.search);
-                      
-                        // Get the individual query parameter values
-                        const author = queryParams.get('author');
-                        const title = queryParams.get('title');
-                      
-                        // Make an API request to fetch the news details using the query parameters
-                        axios.get('/news-detail', {
-                          params: {
-                            author: author,
-                            title: title
-                          }
-                        })
-                        .then(function (response) {
-                          const newsDetailHtml = response.data;
-                          document.getElementById('news-detail').innerHTML = newsDetailHtml;
-                        })
-                        .catch(function (error) {
-                          console.error('Error fetching news detail:', error);
-                        });
-                      </script>
-                    
+                        </div>
+                    </div>  
                 </div>
             </div>
         </div>
