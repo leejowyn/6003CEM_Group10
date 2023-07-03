@@ -27,14 +27,14 @@
     <div class="humberger__menu__overlay"></div>
     <div class="humberger__menu__wrapper">
         <div class="humberger__menu__logo">
-            <a href="./index.html"><img src="img/humberger/humberger-logo.png" alt=""></a>
+            <a href="/index"><img src="img/humberger/humberger-logo.png" alt=""></a>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
                 <li><a href="/index">Home</a></li>
-                <li><a href="/news">News</a></li>
+                <li class="active"><a href="/news">News</a></li>
                 <li><a href="/weather">Weather</a></li>
-                <li><a href="/blog">Blog</a></li>
+                <li><a href="/bookmark">Bookmark</a></li>
                 <li class="dropdown"><a href="#">Pages</a>
                     <ul class="dropdown__menu">
                         <li><a href="./categories-grid.html">Categories Grid</a></li>
@@ -156,7 +156,7 @@
                                 </li>
                                 <li><a href="#">Dinner</a></li>
                                 <li><a href="#">Desserts</a></li>
-                                <li><a href="#">Vegan</a></li>
+                                <li><a href="/bookmark">Bookmark</a></li>
                                 <li><a href="/about">About</a></li>
                                 <li><a href="/contact">Contact</a></li>
                             </ul>
@@ -215,14 +215,12 @@
                             <br>
                         </div>
                     </div>
-                    <div class="single-post__social__item">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                            <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
-                        </ul>
-                    </div>
+                    <div id="success-alert" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                        Successfully added to bookmark.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
                     <div class="single-post__recipe__details">
                         <div class="single-post__recipe__details__option">
                             <ul>
@@ -238,7 +236,8 @@
                                     <h5><i class="fa fa-clock-o"></i> SOURCE</h5>
                                     <span><%= source.name %></span>
                                 </li>
-                                <li><a href="#" class="primary-btn"><i class="fa fa-print"></i> Read more</a></li>
+                                <li><button onclick="addToBookmark('<%= encodeURIComponent(title) %>', '<%= encodeURIComponent(author) %>', '<%= encodeURIComponent(source.name) %>', '<%= encodeURIComponent(description) %>')" class="primary-btn"><i class="fa fa-bookmark"></i> Add to Bookmark</button>            
+                                </li>
                             </ul>
                         </div>
                         <div class="single-post__recipe__details__indegradients">
@@ -248,24 +247,22 @@
                     </div>
                     <div class="single-post__quote">
                         <p><%= content %></p>
-                        <span>FROM <b><%= source.name %></b></span>
+                        <span><a href="<%= url %>" target="_blank"><b>Click Here for the News Source</b></a></span>
                     </div>
                     <div class="single-post__author__profile">
                         <div class="single-post__author__profile__pic">
-                            <img src="img/categories/single-post/author-profile.jpg" alt="">
+                            <img src="img/profile.png" alt="">
                         </div>
                         <div class="single-post__author__profile__text">
-                            <h4>Teoh</h4>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                            <div class="single-post__author__profile__social">
+                            <p>Author:</p>
+                            <h4><%= author %></h4>
+                            <!-- <div class="single-post__author__profile__social">
                                 <a href="#"><i class="fa fa-facebook"></i></a>
                                 <a href="#"><i class="fa fa-twitter"></i></a>
                                 <a href="#"><i class="fa fa-google-plus"></i></a>
                                 <a href="#"><i class="fa fa-instagram"></i></a>
                                 <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>  
                 </div>
@@ -273,7 +270,29 @@
         </div>
     </section>
     <!-- Single Post Section End -->
+    <!-- Bookmark Save Function -->
+    <script>
+        function addToBookmark(title, author, sourceName, description) {
+          const url = '/bookmark' +
+            '?title=' + encodeURIComponent(title) +
+            '&author=' + encodeURIComponent(author) +
+            '&sourceName=' + encodeURIComponent(sourceName) +
+            '&description=' + encodeURIComponent(description);
 
+          fetch(url, { method: 'POST' })
+            .then(response => {
+              if (response.ok) {
+                console.log('Bookmark saved to database');
+                document.getElementById('success-alert').style.display = 'block';
+              } else {
+                console.error('Error saving bookmark to database:', response.status);
+              }
+            })
+            .catch(error => {
+              console.error('Error saving bookmark:', error);
+            });
+        }
+      </script>
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container-fluid">
