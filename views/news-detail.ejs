@@ -52,7 +52,7 @@
         <div id="mobile-menu-wrap"></div>
         <div class="humberger__menu__about">
             <div class="humberger__menu__title sidebar__item__title">
-                <h6>About me</h6>
+                <h6>News Detail</h6>
             </div>
             <img src="img/humberger/humberger-about.jpg" alt="">
             <h6>Hi every one! I,m Lena Mollein.</h6>
@@ -273,25 +273,26 @@
     <!-- Bookmark Save Function -->
     <script>
         function addToBookmark(title, author, sourceName, description) {
-          const url = '/bookmark' +
-            '?title=' + encodeURIComponent(title) +
-            '&author=' + encodeURIComponent(author) +
-            '&sourceName=' + encodeURIComponent(sourceName) +
-            '&description=' + encodeURIComponent(description);
+  const url = '/bookmark' +
+    '?title=' + encodeURIComponent(title) +
+    '&author=' + encodeURIComponent(author) +
+    '&sourceName=' + encodeURIComponent(sourceName) +
+    '&description=' + encodeURIComponent(description)
 
-          fetch(url, { method: 'POST' })
-            .then(response => {
-              if (response.ok) {
-                console.log('Bookmark saved to database');
-                document.getElementById('success-alert').style.display = 'block';
-              } else {
-                console.error('Error saving bookmark to database:', response.status);
-              }
-            })
-            .catch(error => {
-              console.error('Error saving bookmark:', error);
-            });
-        }
+  fetch(url, { method: 'POST' })
+    .then(response => {
+      if (response.ok) {
+        console.log('Bookmark saved to database');
+        document.getElementById('success-alert').style.display = 'block';
+      } else {
+        console.error('Error saving bookmark to database:', response.status);
+      }
+    })
+    .catch(error => {
+      console.error('Error saving bookmark:', error);
+    });
+}
+
       </script>
     <!-- Footer Section Begin -->
     <footer class="footer">

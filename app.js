@@ -1,17 +1,10 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-
 const app = express();
-//Define the view to ejs
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/css', express.static(path.join(__dirname, 'css')));
-app.use('/js', express.static(path.join(__dirname, 'js')));
-app.use('/saas', express.static(path.join(__dirname, 'saas')));
-app.use('/Source', express.static(path.join(__dirname, 'Source')));
-app.use('/img', express.static(path.join(__dirname, 'img')));
-app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true })); 
 
 const api_key = '1f816631501047999c8561cc58b5dae0';
 
@@ -135,27 +128,31 @@ mongoose.connect(db).then(() => {
 
 // Get bookmark detail in database and display
 app.get('/bookmark', (req, res) => {
-
   Bookmark.find()
     .then((bookmarks) => {
-      res.render('bookmark', { bookmarks }); 
+      const successMessage = req.query.success;
+      const errorMessage = req.query.error;
+      res.render('bookmark', { bookmarks, success: successMessage, error: errorMessage });
     })
     .catch((error) => {
       console.error('Error retrieving bookmarks from the database:', error);
-      res.status(500).send('Error retrieving bookmarks');
+      const errorMessage = 'Error retrieving bookmarks from the database';
+      res.render('bookmark', { error: errorMessage });
     });
 });
+
 
 //Bookmark route
 app.post('/bookmark', (req, res) => {
   // Retrieve the data
-  const { title, author, sourceName, description } = req.body || req.query;
+  const { title, author, sourceName, description, userId } = req.query;
 
   const bookmark = new Bookmark({
     title: decodeURIComponent(title),
     author: decodeURIComponent(author),
     sourceName: decodeURIComponent(sourceName),
-    description: decodeURIComponent(description)
+    description: decodeURIComponent(description),
+    userId: userId
   });
 
   // Save the bookmark to MongoDB
@@ -175,15 +172,32 @@ app.get('/delete/:id', (req, res) => {
   const bookmarkId = req.params.id;
 
   Bookmark.findByIdAndRemove(bookmarkId)
-      .then(() => {
-          console.log('Bookmark deleted from database');
-          res.redirect('/bookmark?success=delete');
-      })
-      .catch((error) => {
-          console.error('Error deleting bookmark from database:', error);
-          res.redirect('/bookmark?error=delete');
-      });
+    .then(() => {
+      console.log('Bookmark deleted from the database');
+      res.redirect('/bookmark?success=Bookmark successfully deleted');
+    })
+    .catch((error) => {
+      console.error('Error deleting bookmark from the database:', error);
+      res.redirect('/bookmark?error=Error deleting bookmark');
+    });
 });
+
+//Edit
+app.post('/edit/:id', (req, res) => {
+  const bookmarkId = req.params.id;
+  const { title, author, sourceName, description } = req.body;
+
+  Bookmark.findByIdAndUpdate(bookmarkId, { title, author, sourceName, description })
+    .then(() => {
+      console.log('Bookmark updated in the database');
+      res.redirect('/bookmark?success=Bookmark successfully updated');
+    })
+    .catch((error) => {
+      console.error('Error updating bookmark in the database:', error);
+      res.redirect('/bookmark?error=Error updating bookmark');
+    });
+});
+
 
 app.get('/about', (req, res) => {
   res.render('about');
