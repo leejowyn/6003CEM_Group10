@@ -3,17 +3,16 @@
     <div class="header__top">
         <div class="container">
             <div class="row">
-                <div class="col-lg-2 col-md-1 col-6 order-md-1 order-1">
-                    <!-- <div class="header__humberger">
+                <!-- <div class="col-lg-1 col-md-1 col-6 order-md-1 order-1">
+                    <div class="header__humberger">
                         <i class="fa fa-bars humberger__open"></i>
-                    </div> -->
-
-                </div>
+                    </div>
+                </div> -->
                 <div class="col-lg-8 col-md-10 order-md-2 order-3">
                     <nav class="header__menu">
                         <ul>
                             <li><a href="/">News</a></li> <!--See line 35-->
-                            <li><a href="/blog">Blog</a></li>
+                            <li><a href="/blog-articles">Blog</a></li>
                             <li><a href="/weather">Weather</a></li>
                             <li><a href="/stock">Stock</a></li>
                             <li><a href="/about">About</a></li>
@@ -21,9 +20,15 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-2 col-md-1 col-6 order-md-3 order-2">
-                    <div class="header__search">
-                        <a href="/auth"><i class="fa fa-user" aria-hidden="true"></i></a>
+                <div class="col-lg-4 col-md-1 col-6 order-md-3 order-2">
+                    <div>
+                        <nav class="header__menu">
+                            <ul>
+                                <li><a href="/blog-articles/my_blog_articles">My Articles</a></li> 
+                                <li><a href="/blog-articles/my_bookmarks">My Bookmark</a></li>
+                                <a href="/auth"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -39,7 +44,7 @@
             </div>
             <div class="col-lg-2 col-md-2">
                 <div class="header__logo">
-                    <h1><a href="./.html"><img src="/images/logo.png" alt=""></a></h1>
+                    <h1><a href="/"><img src="/images/logo.png" alt=""></a></h1>
                 </div>
             </div>
             <div class="col-lg-5 col-md-5">
@@ -52,5 +57,5 @@
                 </div> -->
             </div>
         </div>
-    </div>
+    </div>
 </header>

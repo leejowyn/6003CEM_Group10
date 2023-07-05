@@ -14,7 +14,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname));
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true }));   // Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies (as sent by HTML forms)
 app.use(express.json()); // Add middleware to parse JSON request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -54,6 +54,24 @@ mongoose
   .catch(() => {
     console.log("Can't connect to the database");
   });
+
+
+//Links to next page
+app.get('/weather', (req, res) => {
+  res.render('weather'); // Render the weather.ejs file
+});
+
+app.get('/about', (req, res) => {
+  res.render('about'); // Render the about.ejs file
+});
+
+app.get('/contact', (req, res) => {
+  res.render('contact'); // Render the contact.ejs file
+});
+
+app.get('/admincontact', (req, res) => {
+  res.render('admincontact'); // Render the contact.ejs file
+});
 
 
 app.post('/adminlogout', (req, res) => {
@@ -212,23 +230,6 @@ app.get('/admincontact', async (req, res) => {
 });
 //Contact.js End
 
-//Links to next page
-app.get('/weather', (req, res) => {
-  res.render('weather'); // Render the weather.ejs file
-});
-
-app.get('/about', (req, res) => {
-  res.render('about'); // Render the about.ejs file
-});
-
-app.get('/contact', (req, res) => {
-  res.render('contact'); // Render the contact.ejs file
-});
-
-app.get('/admincontact', (req, res) => {
-  res.render('admincontact'); // Render the contact.ejs file
-});
-
 
 //News Section
 const api_key = '1f816631501047999c8561cc58b5dae0';
@@ -331,12 +332,6 @@ const bookmarkSchema = new mongoose.Schema({
 });
 
 const Bookmark = mongoose.model('bookmark', bookmarkSchema);
-
-mongoose.connect(db).then(() => {
-  console.log('Connected to database');
-}).catch((error) => {
-  console.error('Failed to connect to database:', error);
-});
 
 // Bookmark Route
 app.get('/bookmark', (req, res) => {

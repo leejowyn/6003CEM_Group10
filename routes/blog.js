@@ -4,19 +4,20 @@ const moment = require('moment');
 const blogBookmarkSchema = require('../models/blogBookmarkSchema');
 const blogRouter = express.Router();
 
-
 const blog_id = "123155698763";
 const author_id = "123229832233";
 const user_id = "64a2f0917e3e5d79fb694a81";
-// const author_id = "123238418499";
+
+
+
+
+
+// API token and headers
 const token = "pat-na1-302e381a-bf1d-40dd-9617-d0fe505ab967";
 const headers = { 
     'Authorization': `Bearer ${token}`, 
     'Content-Type': 'application/json'
 };
-
-
-// Get author id
 
 
 // Get blog topics
@@ -168,9 +169,6 @@ blogRouter.get("/my_bookmarks", async (req, res) => {
 
 // Get blog article list by author
 blogRouter.get("/my_blog_articles", (req, res) => {
-    // if not login
-
-
     const url = `https://api.hubapi.com/content/api/v2/blog-posts?blog_author_id=${author_id}&limit=300&order_by=-created`;
 
     axios
