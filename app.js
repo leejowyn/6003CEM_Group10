@@ -236,7 +236,7 @@ const api_key = '1f816631501047999c8561cc58b5dae0';
 let articles = [];
 
 // News Route
-app.get('/news', async (req, res) => {
+app.get('/', async (req, res) => {
   const category = req.query.category || 'all';
   const sort = req.query.sort || 'new';
 
