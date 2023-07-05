@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Foodeiblog Template">
+    <meta name="keywords" content="Foodeiblog, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Foodeiblog | Template</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+    <%- include('./partials/header.ejs') %>
+
+    <% if (!error) { %>
+    <!-- Categories Section Begin -->
+    <section class="categories categories-grid spad">
+        <div class="categories__post">
+            <div class="container">
+                <div class="categories__grid__post">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 mx-auto">
+                            <div class="breadcrumb__text">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h2>My Blog Articles</h2>
+                                    </div>
+                                    <div class="col-4">
+                                        <a href="/blog-articles/add"><button class="site-btn">Create New Article &nbsp;&nbsp;&nbsp;<i class="fa fa-plus"></i></button></a><br><br>
+                                    </div>
+                                </div>
+                                
+                                <div class="breadcrumb__option">
+                                    <a href="/">Home</a>
+                                    <span>My Blog Articles</span>
+                                </div>
+                            </div>
+                            <% if (articles.length > 0) { %>
+                                <% articles.forEach((article, i) => { %>
+                                    <div class="categories__list__post__item" id="post-item-<%= article.id %>">
+                                        <div class="row">
+                                            <div class="single-post__title__meta">
+                                                <h2><%= moment(article.created_time).format('DD') %></h2>
+                                                <span><%= moment(article.created_time).format('MMM') %></span>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                <div class="categories__post__item__text">
+                                                    <span class="post__label"><%= topics[article.topic_ids[0]] %></span>
+                                                    <div class="row">
+                                                        <div class="col-11">
+                                                            <h3 class="post-title"><a href="/blog-articles/article/<%= article.id %>"><%= article.name %></a></h3>
+                                                        </div>
+                                                        <div class="col-1 d-flex">
+                                                            <a href="/blog-articles/edit/<%= article.id %>"><button class="site-btn" style="padding: 7px 11px"><i class="fa fa-edit"></i></button></a>
+                                                            <button class="site-btn" style="padding: 5px 12px; margin-left: 7px;" onclick="confirmDialog('<%= article.id %>')"><i class="fa fa-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <ul class="post__widget">
+                                                        <li>by <span><%= article.blog_author.full_name %></span></li>
+                                                        <li><%= moment(article.created_time).format('YYYY-MM-DD HH:mm:ss') %></li>
+                                                    </ul>
+                                                    <% if (article.post_summary) { %>
+                                                        <p><%- article.post_summary.substring(0, 400) %> <a href="/blog-articles/article/<%= article.id %>">... Read More</a></p>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p>You have not posted any article yet.</p>
+                            <% } %>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+    <% } else { %>
+        <%= errorMsg %>
+    <% } %>
+    
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDialog(article_id) {
+            Swal.fire({
+              title: 'Are you sure you want to delete this article?',
+              text: "You won't be able to revert this.",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete it.',
+              cancelButtonText: 'No'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/blog-articles/delete", true); 
+                xhttp.setRequestHeader("Content-Type", "application/json");
+                xhttp.onreadystatechange = function() {
+                    console.log(this);
+                    if (this.status == 204) {
+                        Swal.fire(
+                          'Successful',
+                          'Article has been successfully deleted.',
+                          'success'
+                        );
+                        var deletedPostItem = document.getElementById("post-item-" + article_id);
+                        if (deletedPostItem) {
+                            // Remove the parent element from the DOM
+                            deletedPostItem.parentNode.removeChild(deletedPostItem);
+                        }
+                    }
+                    else {
+                        var response = this.responseText;
+                        Swal.fire(
+                          'Oops!',
+                          'Something went wrong. ' + response.message,
+                          'error'
+                        )
+                    }
+                };
+                var data = {
+                    article_id: article_id
+                };
+                xhttp.send(JSON.stringify(data));
+              }
+            });
+        }
+    </script>
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
