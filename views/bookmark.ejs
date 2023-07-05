@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="zxx">
+
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Foodeiblog Template">
     <meta name="keywords" content="Foodeiblog, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Top News</title>
+    <title>My Bookmark</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    
 </head>
 
 <body>
@@ -37,7 +39,7 @@
                         <nav class="header__menu">
                             <ul>
                                 <li><a href="/index">Home</a></li>
-                                <li class="active"><a href="/news">News</a>
+                                <li><a href="/news">News</a>
                                     <div class="header__megamenu__wrapper">
                                         <div class="header__megamenu">
                                             <div class="header__megamenu__item">
@@ -81,8 +83,7 @@
                                                 </div>
                                             </div>
                                             <div class="header__megamenu__item">
-                                                <div class="header__megamenu__item--pic set-bg"
-                                                    data-setbg="img/tv.jpg">
+                                                <div class="header__megamenu__item--pic set-bg" data-setbg="img/tv.jpg">
                                                     <div class="label">News</div>
                                                 </div>
                                                 <div class="header__megamenu__item--text">
@@ -95,7 +96,7 @@
                                 </li>
                                 <li><a href="#">Dinner</a></li>
                                 <li><a href="#">Desserts</a></li>
-                                <li><a href="/bookmark">Bookmark</a></li>
+                                <li class="active"><a href="/bookmark">Bookmark</a></li>
                                 <li><a href="/about">About</a></li>
                                 <li><a href="/contact">Contact</a></li>
                             </ul>
@@ -142,84 +143,104 @@
                 <div class="categories__grid__post">
                     <div class="row">
                         <div class="col-lg-8 col-md-8">
-                            <form action="/search" method="get">
-                                <!-- Search box -->
-                                <input type="text" name="query" placeholder="Search Here" style="height: 46px;">
-                                <button type="submit" class="site-btn">Search</button>
-                            </form>
+                            <div class="breadcrumb__text">
+                                <h2><i class="fa fa-bookmark"></i> Bookmarks:</h2>
+                            </div>
+                            <!-- Display message after user perform actions -->
+                                <% if (success) { %>
+                                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <%= success %>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                <% } %>
+                              
+                                <% if (error) { %>
+                                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <%= error %>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                  </div>
+                                <% } %>
                             <br>
                             <!--Get news from NewsAPI-->
-                            <% articles.forEach((article)=> { %>
+                            <% bookmarks.forEach((bookmark)=> { %>
                                 <div class="categories__list__post__item">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="categories__post__item__pic set-bg">
-                                                <img src="<%= article.urlToImage %>">
-                                                <div class="post__meta">
-                                                    <h4>
-                                                        <%= new Date(article.publishedAt).getDate() %>
-                                                    </h4>
-                                                    <span>
-                                                        <%= new Date(article.publishedAt).toLocaleString('default', {
-                                                            month: 'short' }) %>
+                                    <div style="border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 1, 1, 0.3); padding: 20px;">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="categories__post__item__text">
+                                                    <span class="post__label">
+                                                        <%= bookmark.sourceName %>
                                                     </span>
+                                                    <h3>
+                                                        <%= bookmark.title %></a>
+                                                    </h3>
+                                                    <ul class="post__widget">
+                                                        <li>by <span>
+                                                                <%= bookmark.author %>
+                                                            </span></li>
+                                                        <li>from <span>
+                                                                <%= bookmark.sourceName %>
+                                                            </span></li>
+                                                    </ul>
+                                                    <p>
+                                                        <%= bookmark.description %>
+                                                    </p>
+                                                    <div class="post__actions">
+                                                        <a href="#" class="site-btn" data-toggle="modal" data-target="#editModal-<%= bookmark._id %>">
+                                                            <i class="fa fa-pencil"></i> Edit
+                                                        </a>
+                                                        <a href="/delete/<%= bookmark._id %>" class="site-btn" 
+                                                            onclick="return confirm('Are you sure you want to delete this bookmark?')">
+                                                            <i class="fa fa-trash"></i> Delete
+                                                        </a>
+                                                        
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6 col-md-6">
-                                            <div class="categories__post__item__text">
-                                                <span class="post__label">
-                                                    <%= article.source.name %>
-                                                </span>
-                                                <h3><a href="/news-detail?author=<%= article.author ? encodeURIComponent(article.author) : '' %>&title=<%= encodeURIComponent(article.title) %>"><%= article.title %></a></h3>
-                                                <ul class="post__widget">
-                                                    <li>by <span>
-                                                            <%= article.author %>
-                                                        </span></li>
-                                                    <li>from <span>
-                                                            <%= article.source.name %>
-                                                        </span></li>
-                                                </ul>
-                                                <p>
-                                                    <%= article.content %>
-                                                </p>
-                                            </div>
+                                    </div>
+                                </div>
+                                <!-- Edit Dialog -->
+                                <div class="modal fade" id="editModal-<%= bookmark._id %>" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel">Edit Bookmark</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                         </div>
+                                        <div class="modal-body">
+                                        <!-- Edit Form -->
+                                        <form action="/edit/<%= bookmark._id %>" method="POST">
+                                            <div class="form-group">
+                                            <label for="editTitle">Title</label>
+                                            <input type="text" class="form-control" id="editTitle" name="title" value="<%= bookmark.title %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="editAuthor">Author</label>
+                                            <input type="text" class="form-control" id="editAuthor" name="author" value="<%= bookmark.author %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="editSourceName">Source Name</label>
+                                            <input type="text" class="form-control" id="editSourceName" name="sourceName" value="<%= bookmark.sourceName %>" required>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="editDescription">Description</label>
+                                            <textarea class="form-control" id="editDescription" name="description" rows="4" required><%= bookmark.description %></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </form>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
                                 <% }) %>
                                     <!-- End List -->
-                        </div>
-                        <div class="col-lg-4 col-md-4">
-                            <div class="sidebar__item">
-                                <!-- sort function-->
-                                <div class="sidebar__feature__item">
-                                    <div class="sidebar__item__title">
-                                        <h6>SORT BY</h6>
-                                    </div>
-                                    <form action="/news" method="get">
-                                        <input type="hidden" name="category" value="<%= category %>">
-                                        <button type="submit" class="site-btn" name="sort" value="new"
-                                            class="<%= sort === 'new' ? 'active' : '' %>">Latest</button><br><br>
-                                        <button type="submit" class="site-btn" name="sort" value="old"
-                                            class="<%= sort === 'old' ? 'active' : '' %> site-btn">Oldest</button>
-                                    </form>
-                                </div>
-
-                                <div class="sidebar__item__categories">
-                                    <div class="sidebar__item__title">
-                                        <h6>Categories</h6>
-                                    </div>
-                                    <ul>
-                                        <li><a href="/news?category=all">All</a></li>
-                                        <li><a href="/news?category=technology">Technology</a></li>
-                                        <li><a href="/news?category=business">Business</a></li>
-                                        <li><a href="/news?category=sports">Sports</a></li>
-                                        <li><a href="/news?category=science">Science</a></li>
-                                        <li><a href="/news?category=entertainment">Entertainment</a></li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -247,4 +268,5 @@
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
