@@ -110,6 +110,10 @@ ol {
   Helper CSS
 -----------------------*/
 
+.post-title {
+	font-weight: 700;
+}
+
 .section-title {
 	margin-bottom: 70px;
 	text-align: center;
@@ -2067,8 +2071,8 @@ ol {
 .single-post__tags a {
 	display: inline-block;
 	font-size: 13px;
-	color: #444444;
-	background: #f2f2f2;
+	color: white;
+	background: #f4952fd8;
 	padding: 8px 16px 6px;
 	letter-spacing: 1px;
 	margin-right: 10px;
@@ -2598,7 +2602,7 @@ ol {
 
 .contact__form .contact__form__title h2 {
 	text-transform: uppercase;
-	margin-bottom: 18px;
+	margin-bottom: 30px;
 }
 
 .contact__form .contact__form__title p {
@@ -2619,6 +2623,17 @@ ol {
 
 .contact__form form input:last-child {
 	color: #444444;
+}
+
+.contact__form form select {
+	height: 46px;
+	width: 100%;
+	background: transparent;
+	border: 1px solid #e1e1e1;
+	font-size: 14px;
+	color: #444444;
+	padding-left: 20px;
+	margin-bottom: 20px;
 }
 
 .contact__form form textarea {
