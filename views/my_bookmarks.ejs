@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Foodeiblog Template">
+    <meta name="keywords" content="Foodeiblog, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NewsBytes | My Bookmarks</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+    <%- include('./partials/header.ejs') %>
+
+    <% if (!error) { %>
+    <!-- Categories Section Begin -->
+    <section class="categories categories-grid spad">
+        <div class="categories__post">
+            <div class="container">
+                <div class="categories__grid__post">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 mx-auto">
+                            <div class="breadcrumb__text">
+                                <h2>My Bookmarks</h2>
+                                <div class="breadcrumb__option">
+                                    <a href="/">Home</a>
+                                    <span>My Bookmarks</span>
+                                </div>
+                            </div>
+                            <% if (articles.length > 0) { %>
+                                <% articles.forEach((article, i) => { %>
+                                    <div class="categories__list__post__item">
+                                        <div class="row">
+                                            <div class="single-post__title__meta">
+                                                <h2><%= moment(article.created_time).format('DD') %></h2>
+                                                <span><%= moment(article.created_time).format('MMM') %></span>
+                                            </div>
+                                            <div class="col-lg-9 col-md-9">
+                                                <div class="categories__post__item__text">
+                                                    <span class="post__label"><%= topics[article.topic_ids[0]] %></span>
+                                                    <div class="row">
+                                                        <div class="col-11">
+                                                            <h3 class="post-title"><a href="/blog-articles/article/<%= article.id %>"><%= article.name %></a></h3>
+                                                        </div>
+                                                        <div class="col-1">
+                                                            <i class="fa fa-bookmark" style="color: #f4952f; font-size: 18pt; cursor: pointer;" onclick="toggleBookmark(this, '<%= article.id %>', this.classList.contains('fa-bookmark-o'))"></i>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <ul class="post__widget">
+                                                        <li>by <span><%= article.blog_author.full_name %></span></li>
+                                                        <li><%= moment(article.created_time).format('YYYY-MM-DD HH:mm:ss') %></li>
+                                                    </ul>
+                                                    <% if (article.post_summary) { %>
+                                                        <p><%- article.post_summary.substring(0, 400) %> <a href="/blog-articles/article/<%= article.id %>">... Read More</a></p>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                <% }) %>
+                            <% } else { %>
+                                <p>No articles found.</p>
+                            <% } %>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+    <% } else { %>
+        <%= errorMsg %>
+    <% } %>
+    
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function toggleBookmark(bookmarkIcon, article_id, save) {
+            // redirect user to login page in new tab if user click bookmark without login
+            if (!'<%= user_id %>') {
+                window.open('/auth', '_blank');
+                return;
+            }
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/blog-articles/bookmark", true); 
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.onreadystatechange = function() {
+                if (this.status == 200) {
+                    // update bookmark button in ui when toggle and show toast
+                    if (save) {
+                        bookmarkIcon.classList.remove('fa-bookmark-o');
+                        bookmarkIcon.classList.add('fa-bookmark');
+
+                        Swal.fire({
+                            position: 'top',
+                            toast: true,
+                            title: 'Article added to bookmark.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            width: '300px'
+                        });
+                    }
+                    else {
+                        bookmarkIcon.classList.remove('fa-bookmark');
+                        bookmarkIcon.classList.add('fa-bookmark-o');
+
+                        Swal.fire({
+                            position: 'top',
+                            toast: true,
+                            title: 'Article removed from bookmark.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            width: '400px'
+                        });
+                    }
+                }
+                else {
+                    Swal.fire({
+                        position: 'top',
+                        toast: true,
+                        title: 'Failed to bookmark article.',
+                        showConfirmButton: false,
+                        timer: 2000,
+                        width: '300px'
+                    });
+                }
+            };
+            var data = {
+                article_id: article_id,
+                save: save
+            };
+            xhttp.send(JSON.stringify(data));
+        }
+
+    </script>
+
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

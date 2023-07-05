@@ -1,32 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const authRoutes = require('./routes/auth');
-const adminRoutes = require('./routes/admin');
 const request = require('request');
 const ejs = require('ejs');
 const bodyParser = require("body-parser");
 const path = require("path"); // Add this line
 const https = require('https');
-
 const axios = require('axios');
-
 const app = express();
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+app.use(express.static(__dirname));
+app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true })); 
+app.use(express.urlencoded({ extended: true }));   // Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.json()); // Add middleware to parse JSON request bodies
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// Routes
+
+// import route files
+const authRoutes = require('./routes/auth');
+const adminRoutes = require('./routes/admin');
+const blogRoutes = require('./routes/blog');
+
+
+// URL
 app.use('/auth', authRoutes);
 app.use('/admin', adminRoutes);
-app.use(express.static(__dirname));
-app.set('views', path.join(__dirname, 'views'));
+app.use('/blog-articles', blogRoutes);
 
 
 // Session middleware configuration
@@ -425,4 +430,3 @@ app.post('/edit/:id', (req, res) => {
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
-

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Foodeiblog Template">
+    <meta name="keywords" content="Foodeiblog, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NewsBytes | Add Blog Article</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Unna:400,700&display=swap" rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+    <%- include('./partials/header.ejs') %>
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="contact__text">
+                <div class="row">
+                    <div class="col-lg-8 col-md-8 mx-auto">
+                        <div class="contact__form">
+                            <div class="contact__form__title">
+                                <h2>Create article</h2>
+                            </div>
+                            <% if (error) { %>
+                              <div class="alert alert-danger">
+                                <%= errorMsg %>
+                              </div>
+                            <% } %>
+                            <form action="/blog-articles/add" method="post">
+
+                              <p><b>Title</b></p><input type="text" name="title" placeholder="Title" required><br><br>
+                              <p><b>Category</b></p><select name="category">
+                                  <option value="Food and Cooking">Food and Cooking</option>
+                                  <option value="Travel">Travel</option>
+                                  <option value="Lifestyle">Lifestyle</option>
+                                  <option value="Fitness and Wellness">Fitness and Wellness</option>
+                                  <option value="Technology">Technology</option>
+                                  <option value="Business and Finance">Business and Finance</option>
+                                  <option value="Education">Education</option>
+                              </select>
+                              <br><br>
+
+                              <p><b>Summary</b></p><textarea name="summary" placeholder="Summary of the blog post that will appear on the main listing page ..."></textarea>
+                              <br><br><p><b>Content</b></p><textarea name="content" id="content"></textarea>
+                  
+                              <button type="submit" class="site-btn mt-5">Create</button>
+                            </form>
+                            <a href="/blog-articles/my_blog_articles"><button class="btn btn-secondary w-100 rounded-0 mt-2 p-2">BACK</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <script src="https://cdn.tiny.cloud/1/4c7xrn0dxl29k7o0gksjihx4s4lh1jway5j4d4sfa2qc2kl8/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+            { value: 'First.Name', title: 'First Name' },
+            { value: 'Email', title: 'Email' },
+            ]
+        });
+    </script>
+
+    <!-- Js Plugins -->
+    <script src="/js/jquery-3.3.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.slicknav.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
