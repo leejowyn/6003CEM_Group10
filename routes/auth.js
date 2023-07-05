@@ -5,7 +5,7 @@ const axios = require('axios')
 const session = require('express-session');
 const app = express();
 
-app.use(session({
+authRouter.use(session({
     secret: '123abc', 
     resave: false,
     saveUninitialized: true
