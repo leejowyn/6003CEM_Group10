@@ -8,11 +8,14 @@ const ejs = require('ejs');
 const bodyParser = require("body-parser");
 const path = require("path"); // Add this line
 const https = require('https');
+
 const axios = require('axios');
+
 const app = express();
 
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
+
 app.use(express.urlencoded({ extended: true })); 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -204,8 +207,6 @@ app.get('/admincontact', async (req, res) => {
 });
 //Contact.js End
 
-
-
 //Links to next page
 app.get('/weather', (req, res) => {
   res.render('weather'); // Render the weather.ejs file
@@ -222,6 +223,7 @@ app.get('/contact', (req, res) => {
 app.get('/admincontact', (req, res) => {
   res.render('admincontact'); // Render the contact.ejs file
 });
+
 
 //News Section
 const api_key = '1f816631501047999c8561cc58b5dae0';
@@ -423,3 +425,4 @@ app.post('/edit/:id', (req, res) => {
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
 });
+
