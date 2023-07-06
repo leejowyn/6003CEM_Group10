@@ -8,7 +8,7 @@
                         <i class="fa fa-bars humberger__open"></i>
                     </div>
                 </div> -->
-                <div class="col-lg-8 col-md-10 order-md-2 order-3">
+                <div class="col-lg-8 col-md-10 order-md-2 order-3 mx-auto">
                     <nav class="header__menu">
                         <ul>
                             <li><a href="/">News</a></li> <!--See line 35-->
@@ -21,17 +21,27 @@
                         </ul>
                     </nav>
                 </div>
-                <div class="col-lg-4 col-md-1 col-6 order-md-3 order-2">
-                    <div>
+                <% if (user_id) { %>
+                    <div class="col-lg-4 col-md-1 col-6 order-md-3 order-2">
+                        <div>
+                            <nav class="header__menu">
+                                <ul>
+                                    <li><a href="/blog-articles/my_blog_articles">My Articles</a></li> 
+                                    <li><a href="/blog-articles/my_bookmarks">My Bookmark</a></li>
+                                    <li><a href="/userlogout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="col-1 order-md-3 order-2">
                         <nav class="header__menu">
                             <ul>
-                                <li><a href="/blog-articles/my_blog_articles">My Articles</a></li> 
-                                <li><a href="/blog-articles/my_bookmarks">My Bookmark</a></li>
-                                <a href="/auth"><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+                                <li><a href="/auth"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                             </ul>
                         </nav>
                     </div>
-                </div>
+                <% } %>
             </div>
         </div>
     </div>

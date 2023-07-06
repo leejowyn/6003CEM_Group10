@@ -2071,8 +2071,8 @@ ol {
 .single-post__tags a {
 	display: inline-block;
 	font-size: 13px;
-	color: white;
-	background: #f4952fd8;
+	color: #444444;
+	background: #f2f2f2;
 	padding: 8px 16px 6px;
 	letter-spacing: 1px;
 	margin-right: 10px;
@@ -2602,7 +2602,7 @@ ol {
 
 .contact__form .contact__form__title h2 {
 	text-transform: uppercase;
-	margin-bottom: 30px;
+	margin-bottom: 18px;
 }
 
 .contact__form .contact__form__title p {
@@ -2715,6 +2715,7 @@ ol {
 .signin__form .nav-item .nav-link {
 	font-size: 16px;
 	color: #111111;
+	background: #f2f2f2;
 	text-transform: uppercase;
 	border: none;
 	border-top-left-radius: 0;
@@ -2723,7 +2724,7 @@ ol {
 }
 
 .signin__form .nav-item .nav-link.active {
-	background: #f2f2f2;
+	background: white;
 }
 
 .signin__form__text {

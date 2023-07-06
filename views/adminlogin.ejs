@@ -36,17 +36,13 @@
                     <a href="#"><img src="/images/logo.png" alt=""></a>
                 </div>
                 <div class="signin__form">    
-                    <ul class="nav nav-tabs" role="tablist">
+                    <!-- <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab" aria-selected="false">
+                            <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab" aria-selected="false">
                                 Sign in
                             </a>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="tab-content">
                         <% if (typeof error !== 'undefined' && error) { %>
                             <div class="my-3"></div>
@@ -60,11 +56,12 @@
                                 <%= successMessage %>
                             </div>
                         <% } %>
-                        <div class="tab-pane" id="tabs-2" role="tabpanel">
+                        <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                            <h3 class="p-4">Admin Sign In</h3>
                             <div class="signin__form__text">
                                 <form action="/admin/login" method="post">
                                     <input type="email" name="email" placeholder="Email" required>
-                                    <input type="password" name="password" placeholder="Password" required>
+                                    <input type="password" name="password" placeholder="Password" required><br><br>
                                     <button type="submit" class="site-btn">Sign In</button>
                                 </form>
                             </div>

@@ -2,13 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const request = require('request');
-const ejs = require('ejs');
 const bodyParser = require("body-parser");
 const path = require("path"); // Add this line
 const https = require('https');
 const axios = require('axios');
+const userSchema = require('./models/userSchema');
 const app = express();
 
+
+// db connection
+const db = 'mongodb+srv://jowyn:testing123@cluster0.ydsv4eh.mongodb.net/6003CEM';
+mongoose
+  .connect(db)
+  .then(() => {
+    console.log("Connected to the database");
+  })
+  .catch(() => {
+    console.log("Can't connect to the database");
+  });
+
+  
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname));
@@ -20,6 +33,41 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+
+// Session middleware configuration
+app.use(
+  session({
+    secret: '123abc',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+// Custom middleware to set userId in session
+app.use((req, res, next) => {
+  // Check if user ID is available in the session
+  if (req.session.userId) {
+    res.locals.userId = req.session.userId; // Make userId available in response locals
+
+    // get author id from database by using user id
+    userSchema.findOne({ _id: req.session.userId }, 'author_id')
+      .exec()
+      .then((result) => {
+        res.locals.authorId = result.author_id; // Make authorId available in response locals
+        next();
+      })
+      .catch((error) => {
+        console.log(error);
+        next();
+      });
+  } else if (req.session.adminId) {
+    res.locals.adminId = req.session.adminId; // Make adminId available in response locals
+    next();
+  } else {
+    next();
+  }  
+});
 
 
 // import route files
@@ -34,39 +82,17 @@ app.use('/admin', adminRoutes);
 app.use('/blog-articles', blogRoutes);
 
 
-// Session middleware configuration
-app.use(
-  session({
-    secret: '123abc', // Replace with your own secret key
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
-
-// db connection
-const db = 'mongodb+srv://jowyn:testing123@cluster0.ydsv4eh.mongodb.net/6003CEM';
-mongoose
-  .connect(db)
-  .then(() => {
-    console.log("Connected to the database");
-  })
-  .catch(() => {
-    console.log("Can't connect to the database");
-  });
-
-
 //Links to next page
 app.get('/weather', (req, res) => {
-  res.render('weather'); // Render the weather.ejs file
+  res.render('weather', { user_id: res.locals.userId }); // Render the weather.ejs file
 });
 
 app.get('/about', (req, res) => {
-  res.render('about'); // Render the about.ejs file
+  res.render('about', { user_id: res.locals.userId }); // Render the about.ejs file
 });
 
 app.get('/contact', (req, res) => {
-  res.render('contact'); // Render the contact.ejs file
+  res.render('contact', { user_id: res.locals.userId }); // Render the contact.ejs file
 });
 
 app.get('/admincontact', (req, res) => {
@@ -80,22 +106,23 @@ app.post('/adminlogout', (req, res) => {
     if (err) {
       console.log(err);
     }
+    res.locals.adminId = undefined; // Clear userId from res.locals
     // Redirect the admin to the login page or any other appropriate page
     res.render('adminlogin');
   });
 });
 
-app.post('/userlogout', (req, res) => {
+app.get('/userlogout', (req, res) => {
   // Destroy the session
   req.session.destroy((err) => {
     if (err) {
       console.log(err);
     }
+    res.locals.userId = undefined; // Clear userId from res.locals
     // Redirect the user to the login page 
     res.render('auth');
   });
 });
-
 
 
 //TwelveData.js Start
@@ -141,7 +168,7 @@ app.get('/stock', async (req, res) => {
     IXICprice: search["IXIC"],
     GOOGLprice: search["GOOGL"],
   };
-  res.render('stock', templateData);
+  res.render('stock', { templateData, user_id: res.locals.userId });
 });
 //TwelveData.js End
 
@@ -176,7 +203,7 @@ app.post("/weather", (req, res) => {
         weatherMain: weatherMain,
       };
 
-      res.render('weatherdetails', { weatherInfo });
+      res.render('weatherdetails', { weatherInfo, user_id: res.locals.userId });
     });
   });
 });
@@ -211,11 +238,9 @@ app.post('/contact', (req, res) => {
   formData.save()
     .then(() => {
       console.log('Form data saved to MongoDB');
-      res.redirect('/success');
     })
     .catch((error) => {
       console.error('Error saving form data', error);
-      res.redirect('/error');
     });
 });
 
@@ -225,7 +250,6 @@ app.get('/admincontact', async (req, res) => {
     res.render('admincontact', { contacts });
   } catch (error) {
     console.error('Error retrieving contact data', error);
-    res.redirect('/error');
   }
 });
 //Contact.js End
@@ -255,7 +279,7 @@ app.get('/', async (req, res) => {
       articles.sort((a, b) => new Date(a.publishedAt) - new Date(b.publishedAt));
     }
 
-    res.render('news', { articles, category, sort }); // Pass the category and sort
+    res.render('news', { articles, category, sort, user_id: res.locals.userId }); // Pass the category and sort
   } catch (error) {
     console.error('Error fetching news:', error);
     res.status(500).send('Error fetching news');
@@ -296,7 +320,8 @@ app.get('/news-detail', async (req, res) => {
       urlToImage: imageSrc,
       source,
       description,
-      url
+      url,
+      user_id: res.locals.userId
     });
   } else {
     res.status(404).send('News article not found');
@@ -317,7 +342,7 @@ app.get('/search', async (req, res) => {
     //Filter only articles contain image
     articles = articles.filter((article) => article.urlToImage);
 
-    res.render('news', { articles, category, sort }); // Pass the articles, category, and sort
+    res.render('news', { articles, category, sort, user_id: res.locals.userId }); // Pass the articles, category, and sort
   } catch (error) {
     console.error('Error searching news:', error);
     res.status(500).send('Error searching news');
@@ -339,12 +364,12 @@ app.get('/bookmark', (req, res) => {
     .then((bookmarks) => {
       const successMessage = req.query.success;
       const errorMessage = req.query.error;
-      res.render('bookmark', { bookmarks, success: successMessage, error: errorMessage });
+      res.render('bookmark', { bookmarks, success: successMessage, error: errorMessage, user_id: res.locals.userId });
     })
     .catch((error) => {
       console.error('Error retrieving bookmarks from the database:', error);
       const errorMessage = 'Error retrieving bookmarks from the database';
-      res.render('bookmark', { error: errorMessage });
+      res.render('bookmark', { error: errorMessage, user_id: res.locals.userId });
     });
 });
 
@@ -421,7 +446,11 @@ app.post('/edit/:id', (req, res) => {
     });
 });
 
+app.all('*', (req, res) => {
+  res.render('404');
+})
+
 //Server start
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000/');
+app.listen(3004, () => {
+  console.log('Server is running on port 3001');
 });

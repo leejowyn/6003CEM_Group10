@@ -2,18 +2,12 @@ const express = require('express');
 const authRouter = express.Router();
 const userSchema = require('../models/userSchema')
 const axios = require('axios')
-const session = require('express-session');
-const app = express();
-
-authRouter.use(session({
-    secret: '123abc', 
-    resave: false,
-    saveUninitialized: true
-}));
-
 
 authRouter.get('/',(req,res)=>{
-    res.render('auth')
+    if (res.locals.userId) 
+        res.redirect('/');
+    else 
+        res.render('auth');
 })
 
 authRouter.post('/register', (req, res) => {
@@ -80,7 +74,7 @@ authRouter.post('/login', (req, res) => {
                 // User credentials are correct
                 req.session.userId = user._id.valueOf();// Save the user ID in the session
                 console.log(req.session);
-                res.render('contact');
+                res.redirect('/');
             } else { 
                 // User credentials are incorrect
                 const error = true;

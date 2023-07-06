@@ -6,12 +6,6 @@ const session = require('express-session');
 const app = express();
 const mongoose = require('mongoose');
 
-adminRouter.use(session({
-    secret: '123abc',
-    resave: false,
-    saveUninitialized: true
-}));
-
 adminRouter.get('/', (req, res) => {
     res.render('adminlogin')
 })
@@ -57,7 +51,6 @@ adminRouter.get('/admincontact', async (req, res) => {
         res.render('admincontact', { contacts });
     } catch (error) {
         console.error('Error retrieving contact data', error);
-        res.redirect('/error');
     }
 });
 

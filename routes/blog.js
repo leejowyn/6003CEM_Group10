@@ -4,14 +4,8 @@ const moment = require('moment');
 const blogBookmarkSchema = require('../models/blogBookmarkSchema');
 const blogRouter = express.Router();
 
+
 const blog_id = "123155698763";
-const author_id = "123229832233";
-const user_id = "64a2f0917e3e5d79fb694a81";
-
-
-
-
-
 // API token and headers
 const token = "pat-na1-302e381a-bf1d-40dd-9617-d0fe505ab967";
 const headers = { 
@@ -36,7 +30,6 @@ axios
 
 // Get blog article list
 blogRouter.get("/", (req, res) => {
-
     var url = `https://api.hubapi.com/content/api/v2/blog-posts?limit=300`;
     const filterKeyword = req.query.keyword;
     const filterCategory = req.query.category;
@@ -56,7 +49,6 @@ blogRouter.get("/", (req, res) => {
     .get(url, { headers: headers })
     .then(function (response) {
         var articles = response.data.objects;
-        console.log(articles);
 
         // filter keyword
         if (typeof filterKeyword !== 'undefined' && filterKeyword != "") {
@@ -74,17 +66,18 @@ blogRouter.get("/", (req, res) => {
             articles = articles.filter(article => article.topic_ids[0] == topic_id);
         }
 
-        res.render("blog_articles", { error: false, articles, topics, moment, filterKeyword, filterOrderBy, filterCategory });
+        res.render("blog_articles", { error: false, articles, topics, moment, filterKeyword, filterOrderBy, filterCategory, user_id: res.locals.userId });
     })
     .catch(function (err) {
         console.log(err);
-        res.render("blog_articles", { error: true, errorMsg: "Failed to load blog article." });
+        res.render("blog_articles", { error: true, errorMsg: "Failed to load blog article.", user_id: res.locals.userId });
     });
 });
 
 
 // Get single blog article
 blogRouter.get("/article/:id", (req, res) => {
+    const user_id = res.locals.userId;
     const article_id = req.params.id;
     const url = `https://api.hubapi.com/content/api/v2/blog-posts/${article_id}`;
     var isBookmark = false;
@@ -94,17 +87,18 @@ blogRouter.get("/article/:id", (req, res) => {
     .then(function (response) {
         // check if user bookmark
         blogBookmarkSchema
-        .findOne({ user_id: user_id, article_id: article_id })
+        .findOne({ user_id, article_id: article_id })
         .then(record => {
             if (record) isBookmark = true;
             res.render("blog_article", { error: false, article: response.data, topics, moment, isBookmark, user_id });
         })
         .catch(err => {
-            res.render("blog_article", { error: true, article: response.data, topics, moment, isBookmark, user_id, errorMsg: "Failed to retrieve bookmark." });
+            res.render("blog_article", { error: true, article: response.data, topics, moment, isBookmark, errorMsg: "Failed to retrieve bookmark.", user_id });
         });
     })
     .catch(function (err) {
-        res.render("blog_article", { error: true, errorMsg: "Failed to load article." });
+        res.redirect("404");
+        // res.render("blog_article", { error: true, errorMsg: "Failed to load article.", user_id});
     });
 });
 
@@ -115,7 +109,7 @@ blogRouter.post("/bookmark", (req, res) => {
     const save = req.body.save;
 
     const bookmarkData = new blogBookmarkSchema({
-        user_id: user_id,
+        user_id: res.locals.userId,
         article_id: article_id
     })
 
@@ -124,7 +118,6 @@ blogRouter.post("/bookmark", (req, res) => {
         bookmarkData
         .save()
         .then(result => {
-            console.log(result);
             res.sendStatus(200);
         })
         .catch(error => {
@@ -135,7 +128,7 @@ blogRouter.post("/bookmark", (req, res) => {
     else {
         // delete this bookmark from database
         blogBookmarkSchema
-        .deleteOne({ user_id: user_id, article_id: article_id })
+        .deleteOne({ user_id: res.locals.userId, article_id: article_id })
         .then(() => {
             res.sendStatus(200);
         })
@@ -148,43 +141,56 @@ blogRouter.post("/bookmark", (req, res) => {
 
 // Get all bookmarked article by user
 blogRouter.get("/my_bookmarks", async (req, res) => {
-    try {
-      const records = await blogBookmarkSchema.find({ user_id: user_id });
-      const article_ids = records.map(record => record.article_id);
-  
-      const url = "https://api.hubapi.com/content/api/v2/blog-posts/";
-      const promises = article_ids.map(article_id => axios.get(url + article_id, { headers: headers }));
-  
-      const results = await Promise.all(promises);
-      const bookmarked_articles = results.map(result => result.data);
-
-      console.log(bookmarked_articles);
-  
-      res.render("my_bookmarks", { error: false, articles: bookmarked_articles, topics, moment, user_id });
-    } catch (error) {
-      res.render("my_bookmarks", { error: true, errorMsg: "Failed to load bookmarked articles." });
+    if (!res.locals.userId) {
+        res.redirect('/auth');
+    } 
+    else {
+        try {
+            const user_id = res.locals.userId;
+            const records = await blogBookmarkSchema.find({ user_id });
+            const article_ids = records.map(record => record.article_id);
+    
+            const url = "https://api.hubapi.com/content/api/v2/blog-posts/";
+            const promises = article_ids.map(article_id => axios.get(url + article_id, { headers: headers }));
+    
+            const results = await Promise.all(promises);
+            const bookmarked_articles = results.map(result => result.data);
+    
+            res.render("my_bookmarks", { error: false, articles: bookmarked_articles, topics, moment, user_id });
+        } catch (error) {
+            res.render("my_bookmarks", { error: true, errorMsg: "Failed to load bookmarked articles. " + error, user_id: res.locals.userId });
+        }
     }
 });
   
 
 // Get blog article list by author
 blogRouter.get("/my_blog_articles", (req, res) => {
-    const url = `https://api.hubapi.com/content/api/v2/blog-posts?blog_author_id=${author_id}&limit=300&order_by=-created`;
-
-    axios
-    .get(url, { headers: headers })
-    .then(function (response) {
-        res.render("my_blog_articles", { error: false, articles: response.data.objects, topics, moment });
-    })
-    .catch(function (err) {
-        res.render("my_blog_articles", { error: true, errorMsg: "Failed to load blog article." });
-    });
+    if (!res.locals.userId) {
+        res.redirect('/auth');
+    }
+    else {
+        const author_id = res.locals.authorId;
+        const url = `https://api.hubapi.com/content/api/v2/blog-posts?blog_author_id=${author_id}&limit=300&order_by=-created`;
+    
+        axios
+        .get(url, { headers: headers })
+        .then(function (response) {
+            res.render("my_blog_articles", { error: false, articles: response.data.objects, topics, moment, user_id: res.locals.userId });
+        })
+        .catch(function (err) {
+            res.render("my_blog_articles", { error: true, errorMsg: "Failed to load blog article.", user_id: res.locals.userId });
+        });
+    }
 });
 
 
 // Create blog article form
 blogRouter.get("/add", (req, res) => {
-    res.render("add_blog_article", { error: false }); 
+    if (!res.locals.userId)
+        res.redirect('/auth');
+    else 
+        res.render("add_blog_article", { error: false, user_id: res.locals.userId }); 
 });
 
 
@@ -203,7 +209,7 @@ blogRouter.post("/add", (req, res) => {
             post_body: req.body.content,
             post_summary: req.body.summary,
             topic_ids: [topic_id],
-            blog_author_id: author_id
+            blog_author_id: res.locals.authorId
         }
     };
         
@@ -212,7 +218,7 @@ blogRouter.post("/add", (req, res) => {
         res.redirect("./my_blog_articles");
     })
     .catch(function (err2) {
-        res.render("add_blog_article", { error: true, errorMsg: "Failed to create blog article." });
+        res.render("add_blog_article", { error: true, errorMsg: "Failed to create blog article.", user_id: res.locals.userId });
     });
 
 });
@@ -226,19 +232,24 @@ blogRouter.get("/edit/:id", (req, res) => {
     axios
     .get(url, { headers: headers })
     .then(function (response) {
-        console.log(response.data);
-        const messageDetails = {
-            message: "",
-        };
-        res.render("edit_blog_article", { error: false, messageDetails, article: response.data, topics, moment });
+        if (response.data.author_id != res.locals.authorId) {
+            res.redirect("403");
+        }
+        else {
+            const messageDetails = {
+                message: "",
+            };
+            res.render("edit_blog_article", { error: false, messageDetails, article: response.data, topics, moment, user_id: res.locals.userId });
+        }
     })
     .catch(function (err) {
         console.log(err);
-        const messageDetails = {
-            message: "Failed to load article.",
-            errorType: "load"
-        };
-        res.render("edit_blog_article", { error: true, messageDetails });
+        res.redirect("404");
+        // const messageDetails = {
+        //     message: "Failed to load article.",
+        //     errorType: "load"
+        // };
+        // res.render("edit_blog_article", { error: true, messageDetails, user_id: res.locals.userId });
     });
 });
 
@@ -273,14 +284,14 @@ blogRouter.post("/edit/:id", (req, res) => {
         const messageDetails = {
             message: "Article has been successfully updated."
         };
-        res.render("edit_blog_article", { error: false, messageDetails, article, topics });
+        res.render("edit_blog_article", { error: false, messageDetails, article, topics, user_id: res.locals.userId });
     })
     .catch(function (err) {
         const messageDetails = {
             message: "Failed to update article.",
             errorType: "update"
         };
-        res.render("edit_blog_article", { error: true, messageDetails, article, topics });
+        res.render("edit_blog_article", { error: true, messageDetails, article, topics, user_id: res.locals.userId });
     });
 });
 
