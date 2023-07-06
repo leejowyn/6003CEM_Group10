@@ -82,8 +82,7 @@
                                     </span>
                                 </li>
                                 <li>
-                                        <button onclick="addToBookmark('<%= encodeURIComponent(title) %>', '<%= encodeURIComponent(author) %>', '<%= encodeURIComponent(source.name) %>', '<%= encodeURIComponent(description) %>')"
-                                        class="primary-btn"><i class="fa fa-bookmark"></i> Add to Bookmark</button>
+                                    <button id="addToBookmarkBtn" class="primary-btn"><i class="fa fa-bookmark"></i> Add to Bookmark</button>
                                 </li>
                             </ul>
                         </div>
@@ -118,13 +117,23 @@
     <!-- Single Post Section End -->
     <!-- Bookmark Save Function -->
     <script>
-        function addToBookmark(title, author, sourceName, description) {
+        const addToBookmarkBtn = document.getElementById('addToBookmarkBtn');
+
+        addToBookmarkBtn.addEventListener('click', () => {
+
+            const title = '<%= encodeURIComponent(title) %>';
+            const author = '<%= encodeURIComponent(author) %>';
+            const sourceName = '<%= encodeURIComponent(source.name) %>';
+            const description = '<%= encodeURIComponent(description) %>';
+
+
             const url = '/bookmark' +
                 '?title=' + encodeURIComponent(title) +
                 '&author=' + encodeURIComponent(author) +
                 '&sourceName=' + encodeURIComponent(sourceName) +
-                '&description=' + encodeURIComponent(description)
+                '&description=' + encodeURIComponent(description);
 
+            // Send POST request to add the bookmark
             fetch(url, { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
@@ -137,7 +146,7 @@
                 .catch(error => {
                     console.error('Error saving bookmark:', error);
                 });
-        }
+        });
     </script>
     <!-- Footer Section Begin -->
     <footer class="footer">
