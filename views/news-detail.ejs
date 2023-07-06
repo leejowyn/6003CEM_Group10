@@ -82,7 +82,8 @@
                                     </span>
                                 </li>
                                 <li>
-                                    <button onclick="addToBookmark('${encodeURIComponent(title)}', '${encodeURIComponent(author)}', '${encodeURIComponent(source.name)}', '${encodeURIComponent(description)}')" class="primary-btn"><i class="fa fa-bookmark"></i> Add to Bookmark</button>
+                                        <button onclick="addToBookmark('<%= encodeURIComponent(title) %>', '<%= encodeURIComponent(author) %>', '<%= encodeURIComponent(source.name) %>', '<%= encodeURIComponent(description) %>')"
+                                        class="primary-btn"><i class="fa fa-bookmark"></i> Add to Bookmark</button>
                                 </li>
                             </ul>
                         </div>
