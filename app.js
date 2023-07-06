@@ -7,6 +7,7 @@ const path = require("path"); // Add this line
 const https = require('https');
 const axios = require('axios');
 const userSchema = require('./models/userSchema');
+const Contact = require('./models/contactSchema');
 const app = express();
 
 
@@ -95,9 +96,9 @@ app.get('/contact', (req, res) => {
   res.render('contact', { user_id: res.locals.userId }); // Render the contact.ejs file
 });
 
-app.get('/admincontact', (req, res) => {
-  res.render('admincontact'); // Render the contact.ejs file
-});
+// app.get('/admincontact', (req, res) => {
+//   res.render('admincontact'); // Render the contact.ejs file
+// });
 
 
 app.post('/adminlogout', (req, res) => {
@@ -213,19 +214,6 @@ app.post("/weather", (req, res) => {
 
 //Contact.js Start
 app.post('/contact', (req, res) => {
-
-
-  // Create a schema for the contact form data
-  const contactSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    subject: String,
-    message: String
-  });
-
-  // Create a model based on the schema
-  const Contact = mongoose.model('contact', contactSchema);
-
   // Create a new document from the submitted form data
   const formData = new Contact({
     name: req.body.name,
@@ -244,14 +232,14 @@ app.post('/contact', (req, res) => {
     });
 });
 
-app.get('/admincontact', async (req, res) => {
-  try {
-    const contacts = await Contact.find({});
-    res.render('admincontact', { contacts });
-  } catch (error) {
-    console.error('Error retrieving contact data', error);
-  }
-});
+// app.get('/admincontact', async (req, res) => {
+//   try {
+//     const contacts = await Contact.find({});
+//     res.render('admincontact', { contacts });
+//   } catch (error) {
+//     console.error('Error retrieving contact data', error);
+//   }
+// });
 //Contact.js End
 
 
@@ -451,6 +439,6 @@ app.all('*', (req, res) => {
 })
 
 //Server start
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log('Server is running on port 3000');
 });

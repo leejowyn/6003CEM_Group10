@@ -8,7 +8,7 @@ authRouter.get('/',(req,res)=>{
         res.redirect('/');
     else 
         res.render('auth');
-})
+});
 
 authRouter.post('/register', (req, res) => {
     console.log(req.body);

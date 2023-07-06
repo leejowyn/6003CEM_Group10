@@ -97,7 +97,7 @@ blogRouter.get("/article/:id", (req, res) => {
         });
     })
     .catch(function (err) {
-        res.redirect("404");
+        res.render("404");
         // res.render("blog_article", { error: true, errorMsg: "Failed to load article.", user_id});
     });
 });
@@ -232,8 +232,8 @@ blogRouter.get("/edit/:id", (req, res) => {
     axios
     .get(url, { headers: headers })
     .then(function (response) {
-        if (response.data.author_id != res.locals.authorId) {
-            res.redirect("403");
+        if (response.data.blog_post_author.id != res.locals.authorId) {
+            res.render("403");
         }
         else {
             const messageDetails = {
@@ -244,7 +244,7 @@ blogRouter.get("/edit/:id", (req, res) => {
     })
     .catch(function (err) {
         console.log(err);
-        res.redirect("404");
+        res.render("404");
         // const messageDetails = {
         //     message: "Failed to load article.",
         //     errorType: "load"
