@@ -80,7 +80,7 @@ authRouter.post('/login', (req, res) => {
                 // User credentials are correct
                 req.session.userId = user._id.valueOf();// Save the user ID in the session
                 console.log(req.session);
-                res.render('homepage'); // Redirect to the homepage
+                res.render('contact');
             } else { 
                 // User credentials are incorrect
                 const error = true;
