@@ -372,10 +372,10 @@
     "xdg-basedir": "^3.0.0",
     "yallist": "^2.1.2"
   },
-  "scripts": {
+ "scripts": {
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1,
-    "start:" "app.js"
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC"
