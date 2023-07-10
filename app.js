@@ -226,9 +226,11 @@ app.post('/contact', (req, res) => {
   formData.save()
     .then(() => {
       console.log('Form data saved to MongoDB');
+      res.status(200).send('Message has been successfully sent.');
     })
     .catch((error) => {
       console.error('Error saving form data', error);
+      res.status(500).send('Failed to send message.');
     });
 });
 
